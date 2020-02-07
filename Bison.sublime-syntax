@@ -1,0 +1,393 @@
+%YAML 1.2
+---
+# See http://www.sublimetext.com/docs/3/syntax.html
+name: Bison
+file_extensions:
+ - yy
+ - 'y'
+ - ypp
+ - yxx
+ - y++
+ - bison
+ - BISON
+scope: source.bison
+
+variables:
+  # "Symbol names can contain letters, underscores, periods, and non-initial digits and dashes. Dashes in symbol names are a GNU extension, incompatible with POSIX Yacc."
+  # https://www.gnu.org/software/bison/manual/html_node/Symbols.html
+  identifier: '[a-zA-Z_.-][a-zA-Z_.0-9-]*'
+  # Note: if modifying this, see the "For SOME REASON" comment, currently at line 82
+
+contexts:
+  prototype:
+    - match: /\*
+      scope: punctuation.definition.comment.begin.bison
+      push:
+        - meta_scope: comment.block.bison
+        - match: \*/
+          scope: punctuation.definition.comment.end.bison
+          pop: true
+    - match: //
+      scope: punctuation.definition.comment.begin.bison
+      push:
+        - meta_scope: comment.line.double-slash.bison
+        - match: (?=\n)
+          pop: true
+
+  main:
+    - match: ""
+      push: prologue
+
+
+  prologue:
+    - include: declarations
+    - match: \%\{
+      scope: keyword.declaration.impl.bison
+      push: Packages/C++/C.sublime-syntax
+      with_prototype:
+        - match: \%\}
+          scope: keyword.declaration.impl.bison
+          pop: true
+        - include: yysymbols
+    - match: \%?\}
+      scope: invalid.illegal.bison
+    - match: \%\%
+      scope: keyword.other.bison
+      set: grammar
+
+
+  # Defined in the same order as listed there:
+  # https://www.gnu.org/software/bison/manual/html_node/Declarations.html
+  declarations:
+    # Version requirement
+    - match: (\%)require\b
+      scope: keyword.other.bison
+      captures:
+        1: punctuation.definition.keyword.begin.bison
+      push:
+        - include: string
+        - match: (?=\%)
+          pop: true
+    # Token definition
+    - match: (\%)token\b
+      scope: keyword.declaration.bison
+      captures:
+        1: punctuation.definition.keyword.begin.bison
+      push:
+        - include: type
+        - include: numbers
+        - include: string
+        - match: (?=\%)
+          pop: true
+    # Precedence
+    - match: (\%)(left|right|nonassoc|precedence)\b
+      scope: keyword.declaration.bison
+      captures:
+        1: punctuation.definition.keyword.begin.bison
+        2: storage.modifier.bison
+      push:
+        - include: type
+        - include: numbers
+        - include: string
+        - match: (?=\%)
+          pop: true
+    # Nonterminal symbol typing
+    - match: (\%)(?:nterm|type)\b
+      scope: keyword.declaration.bison
+      captures:
+        1: punctuation.definition.keyword.begin.bison
+      push:
+        - include: type
+        - match: (?=\%)
+          pop: true
+    # Union declaration
+    - match: (\%)union\b
+      scope: keyword.declaration.union.bison
+      captures:
+        1: punctuation.definition.keyword.begin.bison
+      push:
+        - match: "{{identifier}}"
+          scope: entity.name.union.bison
+        - match: (?=\{)
+          set: code
+        - match: \}
+          scope: invalid.illegal.bison
+          pop: true
+    # yyparse parameter type
+    - match: (\%)parse-param\b
+      scope: keyword.other.bison
+      captures:
+        1: punctuation.definition.keyword.begin.bison
+      push:
+        - match: (?=\{)
+          set: code
+        - match: \}
+          scope: invalid.illegal.bison
+          pop: true
+    # Pre-parsing action
+    - match: (\%)initial-action\b
+      scope: keyword.other.bison
+      captures:
+        1: punctuation.definition.keyword.begin.bison
+      push:
+        - match: (?=\{)
+          set: code
+        - match: \}
+          scope: invalid.illegal.bison
+          pop: true
+    # Token destruction + printing
+    - match: (\%)(?:destructor|printer)\b
+      scope: keyword.declaration.function.bison
+      captures:
+        1: punctuation.definition.keyword.begin.bison
+      push:
+        - include: type
+        - match: (?=\{)
+          push: code
+        - match: (?=\%)
+          pop: true
+        - match: \}
+          scope: invalid.illegal.bison
+          pop: true
+    # Conflict suppression
+    - include: expect
+    # First symbol specification
+    - match: (\%)start\b
+      scope: keyword.other.bison
+      captures:
+        1: punctuation.definition.keyword.begin.bison
+    # Header file creation
+    - match: (\%)defines\b
+      scope: keyword.other.bison
+      captures:
+        1: punctuation.definition.keyword.begin.bison
+    # API definitions
+    - match: (\%)define\b
+      scope: keyword.declaration.bison
+      captures:
+        1: punctuation.definition.keyword.begin.bison
+      push:
+        - match: "{{identifier}}"
+          scope: entity.name.constant.bison
+          set:
+            - include: string
+            - match: (?=\%)
+              pop: true
+            - match: (?=\{)
+              set: code
+    # File prefix setting
+    - match: (\%)file-prefix\b
+      scope: keyword.other.bison
+      captures:
+        1: punctuation.definition.keyword.begin.bison
+      push:
+        - include: string
+        - match: (?=\%)
+          pop: true
+    # Language setting
+    - match: (\%)language\b
+      scope: keyword.other.bison
+      captures:
+        1: punctuation.definition.keyword.begin.bison
+      push:
+        - include: string
+        - match: (?=\%)
+          pop: true
+    # Locations enabling
+    - match: (\%)locations\b
+      scope: keyword.other.bison
+      captures:
+        1: punctuation.definition.keyword.begin.bison
+    # Name prefix modification
+    - match: (\%)name-prefix\b
+      scope: keyword.other.bison
+      captures:
+        1: punctuation.definition.keyword.begin.bison
+      push:
+        - include: string
+        - match: (?=\%)
+          pop: true
+    # #line output disabling
+    - match: (\%)no-lines\b
+      scope: keyword.other.bison
+      captures:
+        1: punctuation.definition.keyword.begin.bison
+    # Name prefix modification
+    - match: (\%)output\b
+      scope: keyword.other.bison
+      captures:
+        1: punctuation.definition.keyword.begin.bison
+      push:
+        - include: string
+        - match: (?=\%)
+          pop: true
+    # Pure parser setting
+    - match: (\%)pure-parser\b
+      scope: keyword.other.bison
+      captures:
+        1: punctuation.definition.keyword.begin.bison
+    # Skeleton file choosing
+    - match: (\%)skeleton\b
+      scope: keyword.other.bison
+      captures:
+        1: punctuation.definition.keyword.begin.bison
+      push:
+        - include: string
+        - match: (?=\%)
+          pop: true
+    # Token table generation
+    - match: (\%)token-table\b
+      scope: keyword.other.bison
+      captures:
+        1: punctuation.definition.keyword.begin.bison
+    # Verbose output
+    - match: (\%)verbose\b
+      scope: keyword.other.bison
+      captures:
+        1: punctuation.definition.keyword.begin.bison
+    # Yacc emulation
+    - match: (\%)yacc\b
+      scope: keyword.other.bison
+      captures:
+        1: punctuation.definition.keyword.begin.bison
+    # Code insertion
+    - match: (\%)code\b
+      scope: keyword.other.bison
+      captures:
+        1: punctuation.definition.keyword.begin.bison
+      push:
+        - match: (?:requires|provides|top|import)
+          scope: storage.modifier.bison
+        - match: (?=\{)
+          set: code
+    # Illegal keywords
+    - match: \%[a-zA-Z]+\b
+      scope: invalid.illegal.bison
+
+
+  grammar:
+    - match: \b({{identifier}})\s*(:)
+      captures:
+        1: entity.name.rule.bison
+        2: keyword.operator.assignment.bison
+      push: rule
+    - match: \%\%
+      scope: keyword.other.bison
+      set: epilogue
+      with_prototype:
+        - include: yysymbols
+
+  rule:
+    - meta_scope: meta.block.bison
+    - include: string
+    - include: character
+    - match: (\%)empty\b
+      scope: keyword.other.bison
+      captures:
+        1: punctuation.definition.keyword.begin.bison
+    - include: expect
+    - match: (?=\{)
+      push: code
+    - match: \}
+      scope: invalid.illegal.bison
+    - match: \|
+      scope: punctuation.separator.bison
+    - match: ;
+      scope: punctuation.terminator.bison
+      pop: true
+
+
+  epilogue:
+    - include: Packages/C++/C.sublime-syntax
+
+
+  ## Utility scopes
+
+  character:
+    - match: \'
+      scope: punctuation.definition.string.begin.bison
+      push:
+        - meta_scope: string.quoted.single.bison
+        - meta_include_prototype: false
+        - include: string_escapes
+        - match: \'
+          scope: punctuation.definition.string.end.bison
+          pop: true
+
+  # "Include" this code by `push`ing it on matching `(?=\{)`
+  code:
+    - match: \{
+      scope: punctuation.section.block.begin.bison
+      set: code_inner
+      # The C code inside blocks are special, so we'll want to inject some contexts...
+      with_prototype:
+        # For SOME REASON, putting `{{identifier}}` here will not work, but pasting its contents does??
+        - match: (\$)(?:<({{identifier}})>)?(?:\$|-?[0-9]+|[a-zA-Z_.-][a-zA-Z_.0-9-]*|(\[)[a-zA-Z_.-][a-zA-Z_.0-9-]*(\]))
+          scope: variable.parameter.bison
+          captures:
+            1: punctuation.definition.variable.begin.bison
+            2: storage.type.bison
+            3: punctuation.definition.variable.begin.bison
+            4: punctuation.definition.variable.end.bison
+        - include: yysymbols
+
+  code_inner:
+    # Bison uses brackets, just like C does; it relies on them being balanced.
+    # Thus, we have to reimplement brackets ourselves... meh :/
+    - match: \{
+      push: action
+      scope: punctuation.section.block.begin.c
+      meta_scope: meta.block.c
+    - match: \}
+      scope: punctuation.section.block.end.c
+      pop: true
+    - include: Packages/C++/C.sublime-syntax
+
+  # This can be present both in the prologue and in rules
+  expect:
+    - match: (\%)expect(?:-rr)?\b
+      scope: keyword.other.bison
+      captures:
+        1: punctuation.definition.keyword.begin.bison
+      push:
+        - include: numbers
+        - match: (?=\n)
+          pop: true
+
+  numbers:
+    - match: \b(0|[1-9][0-9]?)\b
+      scope: constant.numeric.integer.decimal.bison
+    - match: \b0x[0-9a-fA-F]+\b
+
+  string:
+    - match: \"
+      scope: punctuation.definition.string.begin.bison
+      push:
+        - meta_scope: string.quoted.double.bison
+        - meta_include_prototype: false
+        - include: string_escapes
+        - match: (?:[^a-zA-Z0-9 !\"#%&'()*+,-./:;<=>?\[\\\]^_{|}~])
+          scope: invalid.deprecated.bison
+        - match: \"
+          scope: punctuation.definition.string.end.bison
+          pop: true
+
+  string_escapes:
+    - match: \\[abtnvfr]
+      scope: constant.character.escape.bison
+
+  type:
+    - match: <({{identifier}})>
+      captures:
+        1: storage.type.bison
+
+  yysymbols:
+    # Macros
+    - match: \bYY(?:ABORT|ACCEPT|BACKUP|EMPTY|EOF|ERROR|RECOVERING)\b
+      scope: variable.language.bison
+    # Variables
+    - match: \byy(?:char|clearin|errok|lloc|lval)\b
+      scope: variable.language.bison
+    # Deprecated
+    - match: \bYY(?:PRINT|STYPE)\b
+      scope: invalid.deprecated.bison
