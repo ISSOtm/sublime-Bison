@@ -1,0 +1,37 @@
+{
+	"scope": "meta.section.declarations.bison - meta.setting.bison",
+
+	// Declared in the same order as in the syntax def
+	"completions": [
+		{ "trigger": "%union",          "contents": "%union {$0}" },
+		{ "trigger": "%token",          "contents": "%token ${0:TOKEN_NAME}" },
+		{ "trigger": "%left",           "contents": "%left $${0:TOKEN_NAME}" },
+		{ "trigger": "%right",          "contents": "%right $${0:TOKEN_NAME}" },
+		{ "trigger": "%nonassoc",       "contents": "%nonassoc $${0:TOKEN_NAME}" },
+		{ "trigger": "%precedence",     "contents": "%precedence $${0:TOKEN_NAME}" },
+		{ "trigger": "%nterm",          "contents": "%nterm $${0:TOKEN_NAME}" },
+		{ "trigger": "%type",           "contents": "%type $${0:TOKEN_NAME}" },
+		{ "trigger": "%start",          "contents": "%start $${0:TOKEN_NAME}" },
+		{ "trigger": "%expect",         "contents": "%expect ${0:1}" },
+		{ "trigger": "%expect-rr",      "contents": "%expect-rr ${0:1}" },
+		{ "trigger": "%code",           "contents": "%code ${0:location} {}" },
+		// Skipping deprecated `debug`
+		{ "trigger": "%define",         "contents": "%define ${0:name}" },
+		{ "trigger": "%defines",        "contents": "%defines \"$0\"" },
+		{ "trigger": "%destructor",     "contents": "%destructor {$0} ${1:symbols}" },
+		{ "trigger": "%initial-action", "contents": "%initial-action {$0}" },
+		{ "trigger": "%file-prefix",    "contents": "%file-prefix \"$0\"" },
+		{ "trigger": "%language",       "contents": "%language \"$0\"" },
+		{ "trigger": "%locations",      "contents": "%locations" },
+		// Skipping deprecated `name-prefix`
+		{ "trigger": "%no-lines",       "contents": "%no-lines" },
+		{ "trigger": "%output",         "contents": "%output $0" },
+		{ "trigger": "%pure-parser",    "contents": "%pure-parser $0" },
+		{ "trigger": "%require",        "contents": "%require \"$0\"" },
+		{ "trigger": "%skeleton",       "contents": "%skeleton \"$0\"" },
+		// Skipping deprecated `token-table`
+		{ "trigger": "%verbose",        "contents": "%verbose" },
+		{ "trigger": "%yacc",           "contents": "%yacc" },
+		{ "trigger": "%printer",        "contents": "%printer {$0} ${1:symbols}" },
+	]
+}

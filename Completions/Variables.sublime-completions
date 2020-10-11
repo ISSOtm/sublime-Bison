@@ -1,0 +1,32 @@
+{
+	"scope": "meta.setting.bison",
+
+	"completions": [
+		{ "trigger": "api.filename.type",         "contents": "api.filename.type {$0}" },
+		{ "trigger": "api.header.include",        "contents": "api.header.include {$0}" },
+		{ "trigger": "api.location.file",         "contents": "api.location.file \"$0\"" },
+		{ "trigger": "api.location.include",      "contents": "api.location.include {$0}" },
+		{ "trigger": "api.location.type",         "contents": "api.location.type {$0}" },
+		{ "trigger": "api.namespace",             "contents": "api.namespace {$0}" },
+		{ "trigger": "api.parser.class",          "contents": "api.parser.class {$0}" },
+		{ "trigger": "api.prefix",                "contents": "api.prefix {$0}" },
+		{ "trigger": "api.pure",                  "contents": "api.pure ${0:full}" },
+		{ "trigger": "api.push-pull",             "contents": "api.push-pull ${0:push}" },
+		{ "trigger": "api.symbol.prefix",         "contents": "api.symbol.prefix {$0}" },
+		{ "trigger": "api.token.constructor",     "contents": "api.token.constructor" },
+		{ "trigger": "api.token.prefix",          "contents": "api.token.prefix {$0}" },
+		{ "trigger": "api.token.raw",             "contents": "api.token.raw" },
+		{ "trigger": "api.value.automove",        "contents": "api.value.automove" },
+		{ "trigger": "api.value.type",            "contents": "api.value.type ${0:variant}" },
+		{ "trigger": "api.value.union.name",      "contents": "api.value.union.name ${0:name}" },
+		{ "trigger": "lr.default-reduction",      "contents": "lr.default-reduction ${0:consistent}" },
+		{ "trigger": "lr.keep-unreachable-state", "contents": "lr.keep-unreachable-state ${0:true}" },
+		{ "trigger": "lr.type",                   "contents": "lr.type ${0:ielr}" },
+		// Skipping obsolete `namespace`
+		{ "trigger": "parse.assert",              "contents": "parse.assert" },
+		{ "trigger": "parse.error",               "contents": "parse.error ${0:detailed}" },
+		{ "trigger": "parse.lac",                 "contents": "parse.lac ${0:full}" },
+		{ "trigger": "parse.trace",               "contents": "parse.trace" },
+		// Skipping obsolete `parser_class_name`
+	]
+}

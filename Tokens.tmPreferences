@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>name</key>
+  <string>Token defs</string>
+  <key>scope</key>
+  <string>source.bison entity.name.rule.bison</string>
+  <key>settings</key>
+  <dict>
+    <key>showInSymbolList</key>
+    <integer>1</integer>
+  </dict>
+  <key>uuid</key>
+  <string>9eda8da7-9e7c-43c4-a6c7-46a407d51478</string>
+</dict>
+</plist>
