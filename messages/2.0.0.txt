@@ -1,0 +1,21 @@
+Sublime-Bison 2.0.0 changelog:
+
+Fully rewrote syntax, using better techniques:
+
+ - Rewritten reading through the Bison docs, should be more accurate
+
+ - Syntax should be more lenient and recover from syntax errors better
+
+ - Rules will now show up in "Goto anything"
+
+ - Autocomplete is now aware of possible symbols in declarations; some of them are scattered in the docs, so let me know if I missed any
+
+ - Like the above, but with variable names as well
+
+Given the size of the changes, please let me know ("Issues" link on https://packagecontrol.io/packages/Bison) if this update broke your workflow somehow, or if there are glaring syntax errors.
+
+Known problems:
+
+ - The syntax is only designed to embed C code, which should be fine for C++ code, at least for the most part. Feedback is appreciated.
+
+ - Named refs don't work, for some reason
