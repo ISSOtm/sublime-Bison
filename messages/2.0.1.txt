@@ -1,0 +1,3 @@
+Sublime-Bison 2.0.1 changelog:
+
+ - Fixed many declaration completions, such as "%type", not working
