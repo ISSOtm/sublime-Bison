@@ -1,10 +1,13 @@
 %YAML 1.2
 ---
 # See http://www.sublimetext.com/docs/3/syntax.html
-name: Bison
+name: Bison (C++)
 file_extensions:
  - yy
  - 'y'
+ - ypp
+ - yxx
+ - y++
  - bison
  - BISON
 scope: source.bison
@@ -63,7 +66,7 @@ contexts:
       scope: keyword.declaration.impl.prologue.bison
       push:
         - meta_scope: meta.block.prologue.bison
-        - include: Packages/C++/C.sublime-syntax
+        - include: Packages/C++/C++.sublime-syntax
       with_prototype:
         - match: \%\}
           scope: keyword.declaration.impl.prologue.bison
@@ -236,7 +239,7 @@ contexts:
     # Section change, switch to epilogue
     - match: \%\%
       scope: keyword.other.bison
-      set: Packages/C++/C.sublime-syntax
+      set: Packages/C++/C++.sublime-syntax
     # Grammar rule
     - match: \b{{identifier}}\b
       scope: entity.name.rule.bison
@@ -398,7 +401,7 @@ contexts:
     - match: \}
       scope: punctuation.section.block.end.c
       pop: true
-    - include: Packages/C++/C.sublime-syntax
+    - include: Packages/C++/C++.sublime-syntax
 
   function-bindings:
     - match: (?=<|(?:{{identifier}})|"|')
