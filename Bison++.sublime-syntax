@@ -18,7 +18,7 @@ scope: source.bison
 variables:
   # "Symbol names can contain letters, underscores, periods, and non-initial digits and dashes. Dashes in symbol names are a GNU extension, incompatible with POSIX Yacc."
   # https://www.gnu.org/software/bison/manual/html_node/Symbols.html
-  identifier: '[a-zA-Z_.-][a-zA-Z_.0-9-]*'
+  identifier: '[a-zA-Z_.-]([a-zA-Z_.0-9-]|::)*'
 
 contexts:
   prototype:
