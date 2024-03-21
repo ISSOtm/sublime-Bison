@@ -1,0 +1,4 @@
+Sublime-Bison 2.1.0 changelog:
+
+ - Added support for C++ syntaxes!
+   They are automatically recognised for `.ypp`, `.yxx`, and `.y++` files, and can be manually selected as "Bison++" otherwise.
